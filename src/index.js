@@ -1,18 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './components/app/App';
-import { ThemeProvider } from '@mui/system';
-import { themeOptions } from './style/material-themes';
-import { BrowserRouter } from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./components/app/App";
+import { ThemeProvider } from "@mui/system";
+import { themeOptions } from "./style/material-themes";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import configureStore from "./store/configureStore";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const store = configureStore();
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <BrowserRouter>
   <React.StrictMode>
-    <ThemeProvider theme={themeOptions}>
-      <App />
-    </ThemeProvider>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ThemeProvider theme={themeOptions}>
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
-  </BrowserRouter>
 );
