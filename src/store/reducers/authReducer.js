@@ -1,4 +1,4 @@
-import * as actionTypes from "../actions/actionTypes.js";
+import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   loading: false,
@@ -7,9 +7,9 @@ const initialState = {
   user: null,
 };
 
-//start, fail, success
-//1. auth user
-//2. get user data
+// start, fail, success
+// 1. Auth användaren
+// 2. Hämta användardatan
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -17,7 +17,7 @@ const reducer = (state = initialState, action) => {
       return { ...state, error: null, loading: true };
 
     case actionTypes.AUTH_SUCCESS:
-      return { ...state, error: null, loading: false, token: action.payload };
+      return { ...state, loading: false, error: null, token: action.payload };
 
     case actionTypes.AUTH_FAIL:
       return { ...state, error: action.payload, loading: false };
@@ -26,10 +26,11 @@ const reducer = (state = initialState, action) => {
       return { ...state, error: null, loading: true };
 
     case actionTypes.FETCH_CURRENT_USER_SUCCESS:
-      return { ...state, error: null, loading: false, user: action.payload };
+      return { ...state, loading: false, error: null, user: action.payload };
 
     case actionTypes.FETCH_CURRENT_USER_FAIL:
       return { ...state, error: action.payload, loading: false };
+
     default:
       return state;
   }
