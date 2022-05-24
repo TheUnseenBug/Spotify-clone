@@ -4,6 +4,8 @@ export const liveURL = "...";
 export const devURl = "http://localhost:3000/";
 export const redirectURL = devURl;
 export const scopes = [
+  "playlist-read-private",
+  "playlist-read-collaborative",
   "user-read-currently-playing",
   "user-read-recently-played",
   "user-read-playback-state",
