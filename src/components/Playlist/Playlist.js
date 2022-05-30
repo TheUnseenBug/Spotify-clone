@@ -1,53 +1,85 @@
-import React from 'react';
-import { Avatar, Box, Typography } from '@mui/material';
-import SongTable from '../SongTable/SongTable'
+import React, { useState, useEffect } from "react";
+import { Avatar, Box, Typography } from "@mui/material";
+import SongTable from "../SongTable/SongTable";
+import { useParams } from "react-router-dom";
+import { connect } from "react-redux";
 
-const Playlist = ({ songs } ) => {
+const Playlist = ({ spotifyApi, loading }) => {
+  const [playlistInfo, setPlaylistInfo] = useState();
+  const [songs, setSongs] = useState([]);
+  const { id } = useParams();
+
+  useEffect(() => {
+    const getData = async () => {
+      const playlistDetail = await spotifyApi.getPlaylist(id);
+      setPlaylistInfo({
+        image: playlistDetail.body.images[0].url,
+        name: playlistDetail.body.name,
+      });
+      const { tracks } = playlistDetail.body;
+      const formattedSongs = formatSongData(tracks.items);
+      setSongs(formattedSongs);
+    };
+
+    getData();
+  }, [id]);
+
+  const formatSongData = (songs) => {
+    return songs.map((song, i) => {
+      const { track } = song;
+      track.contextURi = `spotify:playlist:${id}`;
+      track.position = i;
+      return track;
+    });
+  };
+
   return (
-    <Box
-      sx={{
-        backgroundColor: 'background.paper',
-        flex: 1,
-        overflowY: 'auto',
-      }}
-    >
+    <Box sx={{ bgcolor: "background.paper", flex: 1, overflowY: "auto" }}>
       <Box
         p={{ xs: 3, md: 4 }}
         sx={{
-          width: '100%',
-          background:
-            'linear-gradient(0deg, rgba(17,38,25,1) 0%, rgba(24,115,38,1) 100%);',
-          display: 'flex',
-          justifyContent: 'flex-start',
-          alignItems: { xs: 'flex-start', md: 'flex-end' },
+          width: "100%",
+          background: "linear-gradient(0deg, #121212 0%, #F0790070 100%);",
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: { xs: "flex-start", md: "flex-end", xl: "center" },
           gap: 3,
-          boxSizing: 'border-box',
-          flexDirection: { xs: 'column', md: 'row' },
+          boxSizing: "border-box",
+          flexDirection: { xs: "column", md: "row" },
         }}
       >
         <Avatar
-          src='/Justin-Bieber.png'
-          alt='logo'
-          variant='square'
+          src={playlistInfo?.image}
+          variant="square"
+          alt="playlist cover"
           sx={{
-            width: { xs: '100%', md: 235 },
-            height: { xs: '100%', md: 235 },
             boxShadow: 15,
+            width: { sx: "100%", md: 235 },
+            height: { sx: "100%", md: 235 },
           }}
         />
-        <Box sx={{ color: 'white' }}>
-          <Typography sx={{ fontSize: 12, fontWeight: 'bold' }}>
-            PLAYLIST
+        <Box>
+          <Typography sx={{ fontSize: 12, fontWeight: "bold", color: "white" }}>
+            Playlist
           </Typography>
-          <Typography sx={{ fontSize: { xs: 42, md: 72 }, fontWeight: 900 }}>
-            Code life
+          <Typography
+            sx={{
+              fontSize: { xs: 42, md: 72 },
+              fontWeight: "bold",
+              color: "white",
+            }}
+          >
+            {playlistInfo?.name}
           </Typography>
         </Box>
       </Box>
-
       <SongTable songs={songs} />
     </Box>
   );
-}
+};
 
-export default Playlist
+const mapState = (state) => {
+  return { loading: state.playlist.loading };
+};
+
+export default connect(mapState)(Playlist);
