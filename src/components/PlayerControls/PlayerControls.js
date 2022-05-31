@@ -70,9 +70,9 @@ const PlayerControlls = ({
             onClick={async () => togglePlay()}
           >
             {playing ? (
-              <Pause sx={{ skipStyle }} />
+              <Pause sx={{ width: 38, height: 38 }} />
             ) : (
-              <PlayArrow sx={{ skipStyle }} />
+              <PlayArrow sx={{ width: 38, height: 38 }} />
             )}
           </IconButton>
           <IconButton size="small" sx={{ color: "text.primary" }}>
