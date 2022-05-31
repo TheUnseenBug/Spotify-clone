@@ -1,11 +1,10 @@
-import { get } from "spotify-web-api-node/src/http-manager";
-import * as actionTypes from "../../constants/actionTypes";
+import * as actionTypes from "./actionTypes";
 
-export const addDevice = () => {
-  return { type: actionTypes.ADD_DEVICE_ID, payload: "device_id" };
+export const addDevice = (device_id) => {
+  return { type: actionTypes.ADD_DEVICE_ID, payload: device_id };
 };
 
-export const Play = () => {
+export const play = () => {
   return { type: actionTypes.PLAY };
 };
 
@@ -26,7 +25,7 @@ export const updatePlayerSuccess = (payload) => {
 };
 
 export const updatePlayerFail = (error) => {
-  return { type: actionTypes.UPDATE_PLAYER_Fail, payload: error };
+  return { type: actionTypes.UPDATE_PLAYER_FAIL, payload: error };
 };
 
 //Allows us to change the player state
@@ -51,6 +50,39 @@ export const updateSongInfo = (spotifyApi) => {
     try {
       const track = await getMyCurrentPlayingTrack(spotifyApi);
       dispatch(updatePlayerSuccess(track));
+    } catch (e) {
+      dispatch(updatePlayerFail(e));
+    }
+  };
+};
+
+export const updateSongInfoStart = (spotifyApi) => {
+  return async (dispatch, getState) => {
+    dispatch(updatePlayerStart());
+    try {
+      const state = getState();
+      const { device_id } = state.player;
+      const playback = await spotifyApi.getMyCurrentPlaybackState();
+      //check if a device is playing music right now
+      if (playback.body && playback.body.is_playing) {
+        await spotifyApi.transferMyPlayback([device_id], true);
+        dispatch(pause());
+        dispatch(updateSongInfo(spotifyApi));
+      } else {
+        await spotifyApi.transferMyPlayback([device_id], true);
+        const currentSong = await spotifyApi.getMyCurrentPlayingTrack();
+        if (currentSong.body) {
+          dispatch(updateSongInfo(spotifyApi));
+        } else {
+          const id = setInterval(async () => {
+            const currentSong = await spotifyApi.getMyCurrentPlayingTrack();
+            if (currentSong.body) {
+              clearInterval(id);
+              dispatch(updateSongInfo(spotifyApi));
+            }
+          }, 500);
+        }
+      }
     } catch (e) {
       dispatch(updatePlayerFail(e));
     }
