@@ -34,7 +34,7 @@ function App({ token, fetchUser, fetchPlaylist, spotifyApi, addDevice }) {
     const player = new window.Spotify.Player({
       name: "Dennis Spotify",
       getOAuthToken: (cb) => cb(token),
-      volume: 0.5,
+      volume: 0.2,
     });
 
     //  ***************
@@ -90,7 +90,6 @@ function App({ token, fetchUser, fetchPlaylist, spotifyApi, addDevice }) {
           </Box>
           <Player spotifyApi={spotifyApi} />
           <MobilNav />
-          <Banner />
         </Box>
       ) : (
         <Routes>
@@ -100,26 +99,6 @@ function App({ token, fetchUser, fetchPlaylist, spotifyApi, addDevice }) {
     </Box>
   );
 }
-
-const Banner = () => {
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        height: 25,
-        bgcolor: "primary.main",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        fontSize: 14,
-        boxSizing: "border-box",
-        paddingRight: "10px",
-      }}
-    >
-      Made with love by Techover Academy
-    </Box>
-  );
-};
 
 const mapStateToProps = (state) => {
   return { token: state.auth.token };
