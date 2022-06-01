@@ -27,7 +27,7 @@ const Playlist = ({ spotifyApi, loading }) => {
   const formatSongData = (songs) => {
     return songs.map((song, i) => {
       const { track } = song;
-      track.contextURi = `spotify:playlist:${id}`;
+      track.contextUri = `spotify:playlist:${id}`;
       track.position = i;
       return track;
     });
@@ -73,7 +73,7 @@ const Playlist = ({ spotifyApi, loading }) => {
           </Typography>
         </Box>
       </Box>
-      <SongTable songs={songs} />
+      <SongTable songs={songs} loading={loading} spotifyApi={spotifyApi} />
     </Box>
   );
 };

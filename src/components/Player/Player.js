@@ -40,6 +40,9 @@ const Player = ({ spotifyApi, updateSongInfoStart, title, artist, image }) => {
 
   useEffect(() => {
     updateSongInfoStart(spotifyApi);
+    spotifyApi.getMySavedTracks({ limit: 10, offset: 0 }).then((data) => {
+      console.log(data);
+    });
   }, []);
 
   return (

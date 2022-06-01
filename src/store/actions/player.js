@@ -28,15 +28,41 @@ export const updatePlayerFail = (error) => {
   return { type: actionTypes.UPDATE_PLAYER_FAIL, payload: error };
 };
 
+export const playSpecifiedSong = (spotifyApi, song) => {
+  return async (dispatch) => {
+    dispatch(updatePlayerStart());
+    try {
+      await spotifyApi.play(song);
+      const { title, image, artist, duration, position } = song;
+      dispatch(
+        updatePlayerSuccess({
+          title,
+          image,
+          artist,
+          duration,
+          position,
+          progress: 0,
+        })
+      );
+      dispatch(play());
+    } catch (e) {
+      dispatch(updatePlayerFail(e));
+    }
+  };
+};
+
 //Allows us to change the player state
 export const playNewSong = (spotifyApi, song) => {
   return async (dispatch) => {
     dispatch(updatePlayerStart());
     try {
       await spotifyApi.play(song);
-      const track = await getMyCurrentPlayingTrack(spotifyApi);
       dispatch(play());
-      dispatch(updatePlayerSuccess(track));
+      //dålig lösning
+      setTimeout(async () => {
+        const track = await getMyCurrentPlayingTrack(spotifyApi);
+        dispatch(updatePlayerSuccess(track));
+      }, 1000);
     } catch (e) {
       dispatch(updatePlayerFail(e));
     }
@@ -91,7 +117,6 @@ export const updateSongInfoStart = (spotifyApi) => {
 
 const getMyCurrentPlayingTrack = async (spotifyApi) => {
   const currentSong = await spotifyApi.getMyCurrentPlayingTrack();
-  console.log(currentSong);
   const { item } = currentSong.body;
   const duration = item.duration_ms / 1000;
   const progress = currentSong.body.progress_ms / 1000;

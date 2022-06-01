@@ -5,7 +5,7 @@ import { IconButton, Grid, Stack, Typography, Slider } from "@mui/material";
 import { connect } from "react-redux";
 import { pause, playNewSong, setProgress } from "../../store/actions/index";
 
-const PlayerControlls = ({
+const PlayerControls = ({
   sliderStyle,
   deviceId,
   pause,
@@ -18,7 +18,21 @@ const PlayerControlls = ({
   spotifyApi,
 }) => {
   const skipStyle = { width: 28, height: 28 };
-  const songDuration = 195;
+
+  useEffect(() => {
+    let intervalId = null;
+    if (playing) {
+      intervalId = setInterval(() => {
+        setProgress(progress + 1);
+      }, 1000);
+    } else if (!playing && progress !== 0) {
+      clearInterval(intervalId);
+    }
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [playing, progress]);
 
   const togglePlay = async () => {
     if (loading) return;
@@ -35,6 +49,26 @@ const PlayerControlls = ({
       pause();
       await spotifyApi.pause();
     }
+  };
+
+  const handleOnSkipPrevious = async () => {
+    if (loading) return;
+    await spotifyApi.skipToPrevious();
+    playNewSong(spotifyApi, {});
+  };
+
+  const handleOnSkipNext = async () => {
+    if (loading) return;
+    await spotifyApi.skipToNext();
+    playNewSong(spotifyApi, {});
+  };
+
+  const handleOnChange = (event, value) => {
+    setProgress(value);
+  };
+
+  const handleOnChangeCommitted = (event, value) => {
+    spotifyApi.seek(value * 1000);
   };
 
   return (
@@ -61,7 +95,11 @@ const PlayerControlls = ({
           alignItems="center"
           sx={{ width: "100%" }}
         >
-          <IconButton size="small" sx={{ color: "text.primary" }}>
+          <IconButton
+            size="small"
+            sx={{ color: "text.primary" }}
+            onClick={async () => handleOnSkipPrevious()}
+          >
             <SkipPrevious sx={skipStyle} />
           </IconButton>
           <IconButton
@@ -75,7 +113,11 @@ const PlayerControlls = ({
               <PlayArrow sx={{ width: 38, height: 38 }} />
             )}
           </IconButton>
-          <IconButton size="small" sx={{ color: "text.primary" }}>
+          <IconButton
+            size="small"
+            sx={{ color: "text.primary" }}
+            onClick={async () => handleOnSkipNext()}
+          >
             <SkipNext sx={skipStyle} />
           </IconButton>
         </Stack>
@@ -90,20 +132,22 @@ const PlayerControlls = ({
             variant="body1"
             sx={{ color: "text.secondary", fontSize: 12 }}
           >
-            {formatTime(38)}
+            {formatTime(progress)}
           </Typography>
           <Slider
             min={0}
-            max={songDuration}
+            max={duration}
             sx={sliderStyle}
             size="medium"
-            value={97}
+            value={progress}
+            onChange={handleOnChange}
+            onChangeCommitted={handleOnChangeCommitted}
           />
           <Typography
             variant="body1"
             sx={{ color: "text.secondary", fontSize: 12 }}
           >
-            {formatTime(songDuration)}
+            {formatTime(duration)}
           </Typography>
         </Stack>
       </Stack>
@@ -130,4 +174,4 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-export default connect(mapState, mapDispatch)(PlayerControlls);
+export default connect(mapState, mapDispatch)(PlayerControls);
