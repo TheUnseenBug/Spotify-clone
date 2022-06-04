@@ -17,3 +17,6 @@ export const ADD_DEVICE_ID = "ADD_DEVICE_ID";
 export const PLAY = "PLAY";
 export const PAUSE = "PAUSE";
 export const SET_PROGRESS = "SET_PROGRESS";
+
+export const OPEN_OVERLAY = "OPEN_OVERLAY";
+export const CLOSE_OVERLAY = "CLOSE_OVERLAY";

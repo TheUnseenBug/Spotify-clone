@@ -34,7 +34,10 @@ const Playlist = ({ spotifyApi, loading }) => {
   };
 
   return (
-    <Box sx={{ bgcolor: "background.paper", flex: 1, overflowY: "auto" }}>
+    <Box
+      id="Playlist__page"
+      sx={{ bgcolor: "background.paper", flex: 1, overflowY: "auto" }}
+    >
       <Box
         p={{ xs: 3, md: 4 }}
         sx={{
@@ -51,7 +54,7 @@ const Playlist = ({ spotifyApi, loading }) => {
         <Avatar
           src={playlistInfo?.image}
           variant="square"
-          alt="playlist cover"
+          alt="Bieber"
           sx={{
             boxShadow: 15,
             width: { sx: "100%", md: 235 },
@@ -59,14 +62,16 @@ const Playlist = ({ spotifyApi, loading }) => {
           }}
         />
         <Box>
-          <Typography sx={{ fontSize: 12, fontWeight: "bold", color: "white" }}>
+          <Typography
+            sx={{ fontSize: 12, fontWeight: "bold", color: "text.primary" }}
+          >
             Playlist
           </Typography>
           <Typography
             sx={{
               fontSize: { xs: 42, md: 72 },
               fontWeight: "bold",
-              color: "white",
+              color: "text.primary",
             }}
           >
             {playlistInfo?.name}

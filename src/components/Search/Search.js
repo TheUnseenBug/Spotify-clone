@@ -39,11 +39,12 @@ const Search = ({ spotifyApi }) => {
 
   return (
     <Box
+      id="Search__page"
       sx={{
-        minHeight: "calc(100vh - 90px)",
-        bgcolor: "background.paper",
         padding: "30px",
-        width: "100%",
+        bgcolor: "background.paper",
+        flex: 1,
+        overflowY: "auto",
       }}
     >
       <form

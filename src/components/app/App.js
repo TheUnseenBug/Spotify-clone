@@ -36,7 +36,7 @@ function App({ token, fetchUser, fetchPlaylist, spotifyApi, addDevice }) {
     const player = new window.Spotify.Player({
       name: "Dennis Spotify",
       getOAuthToken: (cb) => cb(token),
-      volume: 0.5,
+      volume: 0.3,
     });
 
     player.addListener("ready", ({ device_id }) => {

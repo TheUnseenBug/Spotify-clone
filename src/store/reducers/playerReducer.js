@@ -10,10 +10,21 @@ const initialState = {
   title: null,
   artist: null,
   image: null,
+  playerOverlayOpen: false,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.OPEN_OVERLAY:
+      return {
+        ...state,
+        playerOverlayOpen: true,
+      };
+    case actionTypes.CLOSE_OVERLAY:
+      return {
+        ...state,
+        playerOverlayOpen: false,
+      };
     case actionTypes.ADD_DEVICE_ID:
       return {
         ...state,
