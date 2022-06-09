@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Typography, Grid, IconButton, Container } from "@mui/material";
 import PlayerControls from "../PlayerControls/PlayerControls";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
