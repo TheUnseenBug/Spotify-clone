@@ -2,7 +2,7 @@ export const authEndpoint = "https://accounts.spotify.com/authorize";
 export const clientId = "2c4c33a6dc2e4417ac98534f9301c856";
 export const liveURL = "https://spotify-app-clone-dennis.herokuapp.com/";
 export const devURl = "http://localhost:3000/";
-export const redirectURL = liveURL;
+export const redirectURL = devURl;
 export const scopes = [
   "playlist-read-collaborative",
   "playlist-modify-public",

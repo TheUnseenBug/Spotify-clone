@@ -83,6 +83,12 @@ const Player = ({
             justifyContent: "flex-start",
           }}
         >
+          <Avatar
+            src={image?.url}
+            alt={artist}
+            variant="square"
+            sx={{ width: 56, height: 56, marginRight: 2 }}
+          />
           <Box>
             <Typography sx={{ color: "text.primary", fontSize: 14 }}>
               {title}
